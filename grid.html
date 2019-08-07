@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Go with CSS Grid</title>
+    <style>
+        :root {
+            --cell: 25px;
+            --gap: 8px;
+        }
+        .stones {
+            background: #fff;
+            width: calc(var(--cell)*19 + var(--gap)*18);
+            margin: 10px auto;
+            display: grid;
+            grid-template-columns: repeat(19, var(--cell));
+            grid-template-rows: repeat(19, var(--cell));
+            gap: var(--gap);
+            position: relative;
+        }
+        .stones>p {
+            margin: 0;
+            border-radius: 50%;
+            border: 1.5px solid black;
+            background: black;
+            opacity: 0;
+        }
+        .board {
+            position: absolute;
+            top: calc(var(--cell) / 2);
+            left: calc(var(--cell) / 2);
+            width: calc(var(--cell)*18 + var(--gap)*18);
+            display: grid;
+            grid-template-columns: repeat(18, calc(var(--cell) + var(--gap)));
+            grid-template-rows: repeat(18, calc(var(--cell) + var(--gap)));
+            gap: 0;
+            pointer-events: none
+        }
+
+        .board p {
+            border: 1px solid black;
+            box-shadow: 0 0 0 1px black;
+            background: white;
+            margin: 0;
+            padding: 0;
+            opacity: 0.1;
+            pointer-events: none
+        }
+
+
+        .choice {
+            width: calc(var(--cell) * 4);
+            margin: 0 auto;
+        }
+
+        .choice div {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .choice .current {
+            width: var(--cell);
+            height: var(--cell);
+            border-radius: 50%;
+            border: 1.5px solid black;
+            background: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="choice">
+        <div class="text">Turn: </div>
+        <div class="current"></div>
+    </div>
+
+    <div class="stones"></div>
+</body>
+
+<script>
+    window.addEventListener('load', () => {
+        var black = true;
+
+        var stones = document.querySelector('.stones');
+        var board = document.createElement('div');
+        board.className = 'board';
+        stones.append(board);
+        for (let i = 0; i < 19 * 19; i++) {
+            var stone = document.createElement('p');
+            stone.onclick = function () {
+                if (black) {
+                    this.style.background = 'black';
+                    document.querySelector('.current').style.background = 'white';
+                } else {
+                    this.style.background = 'white';
+                    document.querySelector('.current').style.background = 'black';
+                }
+                // Update status
+                this.style.opacity = 1;
+                black = !black;
+            };
+            stones.append(stone);
+            board.append(document.createElement('p'));
+        }
+    });
+</script>
+</html>
